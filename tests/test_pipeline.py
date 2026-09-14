@@ -295,6 +295,81 @@ class TestRealWorldDecks(unittest.TestCase):
             self.assertIn("password-protected", str(caught.exception))
 
 
+class TestSiteMarkdown(unittest.TestCase):
+    """The static site converts the markdown the views already emit, so the
+    web page and the file you paste into WhatsApp can never drift apart."""
+
+    def convert(self, source, **kwargs):
+        from classnotes.site import markdown_to_html
+
+        return markdown_to_html(source, **kwargs)
+
+    def test_page_title_h1_is_dropped(self):
+        """The page supplies its own header; a second one is duplication."""
+        self.assertNotIn("<h1>", self.convert("# Course — Topic\n\ntext"))
+        self.assertIn("<h1>", self.convert("# Course — Topic", skip_h1=False))
+
+    def test_consecutive_bullets_become_one_list(self):
+        out = self.convert("- one\n- two\n- three")
+        self.assertEqual(out.count("<ul>"), 1)
+        self.assertEqual(out.count("<li>"), 3)
+
+    def test_table_converts_and_drops_the_divider_row(self):
+        out = self.convert("| Term | Slide |\n|---|---|\n| **VALS** | 6 |")
+        self.assertIn("<th>Term</th>", out)
+        self.assertIn("<td><strong>VALS</strong></td>", out)
+        self.assertNotIn("---", out)
+
+    def test_mermaid_fence_keeps_its_class_for_rendering(self):
+        out = self.convert('```mermaid\nflowchart TD\n    n1["A"] --> n2["B"]\n```')
+        self.assertIn('<pre class="mermaid">', out)
+        self.assertIn("flowchart TD", out)
+
+    def test_blockquote_and_rule(self):
+        out = self.convert("> the headline\n\n---")
+        self.assertIn("<blockquote>the headline</blockquote>", out)
+        self.assertIn("<hr>", out)
+
+    def test_line_break_in_table_cell_survives(self):
+        self.assertIn("<br>", self.convert("| a <br>b | c |\n|---|---|"))
+
+    def test_model_output_cannot_inject_markup(self):
+        """Terms and definitions come from a model. Angle brackets in them are
+        text, not markup."""
+        out = self.convert("- <script>alert(1)</script> and <img onerror=x>")
+        self.assertNotIn("<script>", out)
+        self.assertNotIn("<img", out)
+        self.assertIn("&lt;script&gt;", out)
+
+    def test_javascript_urls_are_stripped_to_plain_text(self):
+        out = self.convert("- [click me](javascript:alert(1))")
+        self.assertNotIn("javascript:", out)
+        self.assertNotIn("<a ", out)
+        self.assertIn("click me", out)
+
+    def test_http_links_are_kept(self):
+        out = self.convert("- [Khan Academy](https://youtube.com/watch?v=1)")
+        self.assertIn('href="https://youtube.com/watch?v=1"', out)
+        self.assertIn('rel="noopener"', out)
+
+    def test_view_meta_line_is_not_printed_twice(self):
+        """The page header already shows date/instructor/duration."""
+        out = self.convert("# Course — Topic\n\n2026-09-11 · Prof. K · 72 min\n\n> headline")
+        self.assertNotIn("Prof. K", out)
+        self.assertIn("<blockquote>headline</blockquote>", out)
+
+    def test_body_paragraphs_still_render(self):
+        out = self.convert("# T\n\nmeta line\n\n## Section\n\nA real paragraph.")
+        self.assertIn("<p>A real paragraph.</p>", out)
+
+    def test_real_views_round_trip_without_leftover_markup(self):
+        artifact = sample_artifact()
+        for renderer in (skim.render, full.render):
+            out = self.convert(renderer(artifact))
+            self.assertNotIn("**", out)
+            self.assertNotIn("\n| ", out)
+
+
 class TestVersioning(unittest.TestCase):
     def test_versions_increment_and_never_overwrite(self):
         import tempfile

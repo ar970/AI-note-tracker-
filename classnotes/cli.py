@@ -231,6 +231,26 @@ def cmd_views(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_site(args: argparse.Namespace) -> int:
+    """Build a static site from generated sessions. No model call, no cost."""
+    from classnotes import site as site_step
+
+    out_dir = Path(args.out)
+    written = site_step.build(DATA_DIR, out_dir, args.course)
+    sessions = len(written) - 1
+
+    _say("site", f"{sessions} session(s) -> {out_dir}/")
+    if sessions:
+        print()
+        print(
+            "  These are notes from a real class. Consent to make notes for the\n"
+            "  section is not consent to publish them on the open internet — check\n"
+            "  before you point a public domain at this."
+        )
+    print(f"\nPreview locally:  python -m http.server -d {out_dir}")
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="classnotes",
@@ -270,6 +290,11 @@ def build_parser() -> argparse.ArgumentParser:
     render.add_argument("session_id")
     render.add_argument("--views", default="skim,full")
     render.set_defaults(func=cmd_views)
+
+    web = sub.add_parser("site", help="build a static site from all sessions (free)")
+    web.add_argument("--out", default="public", help="output directory (default: public)")
+    web.add_argument("--course", help='heading for the index page, e.g. "Marketing, Sem 3"')
+    web.set_defaults(func=cmd_site)
 
     return parser
 

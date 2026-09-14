@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Management, Sem 3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--ground:#F6F7F9;--surface:#FFF;--sunk:#EFF2F5;--ink:#16202B;--muted:#5C6B7A;
+--faint:#8695A4;--rule:#DCE2E9;--accent:#A8600C;--accent-soft:#F6EBDA;--flag:#0F6E6E;
+--serif:"Newsreader",Georgia,serif;--sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#10151B;--surface:#19202A;
+--sunk:#141A22;--ink:#E4EBF2;--muted:#98A6B4;--faint:#71808F;--rule:#29323D;--accent:#E5A244;
+--accent-soft:#2E2417;--flag:#5FBEBE}}
+:root[data-theme="dark"]{--ground:#10151B;--surface:#19202A;--sunk:#141A22;--ink:#E4EBF2;
+--muted:#98A6B4;--faint:#71808F;--rule:#29323D;--accent:#E5A244;--accent-soft:#2E2417;--flag:#5FBEBE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-inline:20px;padding-block:32px 64px}
+a{color:var(--accent);text-underline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(25px,5vw,33px);line-height:1.2;
+margin:10px 0 6px;text-wrap:balance}
+.meta{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:26px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+box-shadow:0 1px 2px rgba(22,32,43,.05),0 8px 24px -12px rgba(22,32,43,.16)}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;padding:18px 24px;border-bottom:1px solid var(--rule)}
+.tab{font:500 13.5px var(--sans);padding:7px 14px;border-radius:3px;border:1px solid var(--rule);
+background:var(--surface);color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.view{padding:24px 26px 28px}
+.view h2{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+color:var(--faint);font-weight:500;margin:30px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.view h2:first-child{margin-top:0}
+.view h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:22px 0 8px;line-height:1.3}
+.view p{margin:0 0 11px;text-wrap:pretty}
+.view ul{margin:0 0 14px;padding-left:20px}
+.view li{margin-bottom:6px;text-wrap:pretty}
+blockquote{margin:0 0 16px;padding-left:14px;border-left:2px solid var(--accent);
+font-family:var(--serif);font-style:italic;font-size:17px}
+/* Left-aligned so that if the mermaid script is blocked or fails, the raw
+   source degrades to a readable code block instead of centred gibberish.
+   The rendered SVG is centred on its own. */
+pre.mermaid{margin:0 0 18px;padding:18px;background:var(--sunk);border-radius:3px;
+overflow-x:auto;text-align:left;font-family:var(--mono);font-size:12.5px;
+line-height:1.5;color:var(--muted)}
+pre.mermaid svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.scroll{overflow-x:auto;margin-bottom:16px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
+text-transform:uppercase;color:var(--faint);font-weight:500;padding:8px 10px 8px 0;
+border-bottom:1px solid var(--rule)}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--muted)}
+td:first-child{color:var(--ink)}
+td em{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--flag)}
+hr{border:none;border-top:1px solid var(--rule);margin:24px 0 14px}
+.view hr ~ p{font-size:12.5px;color:var(--faint)}
+.index-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.index-list a{display:block;padding:16px 0;border-bottom:1px solid var(--rule);
+text-decoration:none;color:inherit}
+.index-list a:hover .t{color:var(--accent)}
+.index-list .t{font-family:var(--serif);font-size:19px;font-weight:600}
+.index-list .s{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:3px}
+.warn{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:3px;
+padding:13px 15px;font-size:13.5px;color:var(--muted);margin-bottom:26px}
+@media (max-width:480px){.view,.tabs{padding-inline:18px}}
+</style></head><body><div class="wrap">
+<p class="eyebrow">Class notes</p>
+<h1>Marketing Management, Sem 3</h1>
+<p class="meta">1 session</p>
+<ul class="index-list"><li><a href="2026-09-11-marketing-stp/index.html"><div class="t">Segmentation, Targeting and Positioning</div><div class="s">2026-09-11 · Marketing Management, Sem 3</div></a></li></ul></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'neutral'});
+  var tabs = [].slice.call(document.querySelectorAll('.tab'));
+  var views = [].slice.call(document.querySelectorAll('.view'));
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t, j){ t.setAttribute('aria-selected', i===j ? 'true':'false'); });
+      views.forEach(function(v, j){ v.hidden = i!==j; });
+    });
+  });
+})();
+</script>
+</body></html>

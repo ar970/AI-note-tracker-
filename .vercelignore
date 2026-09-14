@@ -1,0 +1,15 @@
+# Only public/ is deployed. Everything below is the pipeline, which does not
+# run on Vercel and must not be uploaded with the site.
+#
+# Keeping requirements.txt out matters: its presence is what makes Vercel
+# detect a Python project and go looking for a serverless entrypoint, which is
+# the "No python entrypoint found" build error.
+classnotes/
+prompts/
+scripts/
+tests/
+data/
+.venv/
+requirements.txt
+schema.sql
+*.py

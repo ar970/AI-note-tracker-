@@ -49,6 +49,48 @@ views/skim.md            paste this into WhatsApp
 views/full.md
 ```
 
+### Publishing the notes
+
+Pasting eight thousand characters of markdown into WhatsApp is worse than sending one link.
+
+```bash
+.venv/bin/python -m classnotes site --course "Marketing Management, Sem 3"
+.venv/bin/python -m http.server -d public      # preview locally
+```
+
+That writes `public/` — a static page per session with the Skim/Full switcher, built by
+converting the markdown the views already emit, so the web page and the file you paste can
+never drift apart. No upload form, no accounts, no database. Those are still step [7].
+
+`public/` is committed and `data/` is not, which is the privacy boundary: raw audio,
+transcripts and alignments stay off GitHub, and only the rendered notes you deliberately
+build go into the repo.
+
+**Before you point a public domain at it:** consent to make notes for the section is not
+consent to publish them on the open internet. A link you send to the class group is a
+different thing from a page Google indexes.
+
+#### Deploying it
+
+`vercel.json` and `.vercelignore` configure Vercel to deploy `public/` as a static site.
+The `.vercelignore` matters: `requirements.txt` at the root is what makes Vercel detect a
+Python project and fail with *"No python entrypoint found"*. If it still misdetects, set
+**Framework Preset → Other** in the project settings.
+
+Any static host works — Netlify, GitHub Pages, Cloudflare Pages. `public/` is plain HTML.
+
+**The pipeline itself cannot run on Vercel**, and no config fixes that:
+
+| | Vercel | A 90-minute lecture needs |
+|---|---|---|
+| Request body | 4.5 MB | 80–150 MB of audio |
+| Function timeout | 60s (300s on Pro) | minutes of ASR plus two generation calls |
+| `ffmpeg` | not available | required to normalise and chunk audio |
+
+When you get to step [7] and want uploads to be self-serve, this needs a container host with
+a real filesystem and no request timeout — Railway, Render, or Fly. Until then it runs on
+your laptop and publishes static output, which costs nothing and blocks nothing.
+
 ### Without any API keys
 
 ```bash

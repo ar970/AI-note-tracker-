@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marketing Management, Sem 3 — Segmentation, Targeting and Positioning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--ground:#F6F7F9;--surface:#FFF;--sunk:#EFF2F5;--ink:#16202B;--muted:#5C6B7A;
+--faint:#8695A4;--rule:#DCE2E9;--accent:#A8600C;--accent-soft:#F6EBDA;--flag:#0F6E6E;
+--serif:"Newsreader",Georgia,serif;--sans:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--ground:#10151B;--surface:#19202A;
+--sunk:#141A22;--ink:#E4EBF2;--muted:#98A6B4;--faint:#71808F;--rule:#29323D;--accent:#E5A244;
+--accent-soft:#2E2417;--flag:#5FBEBE}}
+:root[data-theme="dark"]{--ground:#10151B;--surface:#19202A;--sunk:#141A22;--ink:#E4EBF2;
+--muted:#98A6B4;--faint:#71808F;--rule:#29323D;--accent:#E5A244;--accent-soft:#2E2417;--flag:#5FBEBE}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding-inline:20px;padding-block:32px 64px}
+a{color:var(--accent);text-underline-offset:2px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+h1{font-family:var(--serif);font-weight:500;font-size:clamp(25px,5vw,33px);line-height:1.2;
+margin:10px 0 6px;text-wrap:balance}
+.meta{font-family:var(--mono);font-size:12px;color:var(--faint);margin-bottom:26px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:4px;overflow:hidden;
+box-shadow:0 1px 2px rgba(22,32,43,.05),0 8px 24px -12px rgba(22,32,43,.16)}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;padding:18px 24px;border-bottom:1px solid var(--rule)}
+.tab{font:500 13.5px var(--sans);padding:7px 14px;border-radius:3px;border:1px solid var(--rule);
+background:var(--surface);color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.view{padding:24px 26px 28px}
+.view h2{font-family:var(--mono);font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+color:var(--faint);font-weight:500;margin:30px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.view h2:first-child{margin-top:0}
+.view h3{font-family:var(--serif);font-size:19px;font-weight:600;margin:22px 0 8px;line-height:1.3}
+.view p{margin:0 0 11px;text-wrap:pretty}
+.view ul{margin:0 0 14px;padding-left:20px}
+.view li{margin-bottom:6px;text-wrap:pretty}
+blockquote{margin:0 0 16px;padding-left:14px;border-left:2px solid var(--accent);
+font-family:var(--serif);font-style:italic;font-size:17px}
+/* Left-aligned so that if the mermaid script is blocked or fails, the raw
+   source degrades to a readable code block instead of centred gibberish.
+   The rendered SVG is centred on its own. */
+pre.mermaid{margin:0 0 18px;padding:18px;background:var(--sunk);border-radius:3px;
+overflow-x:auto;text-align:left;font-family:var(--mono);font-size:12.5px;
+line-height:1.5;color:var(--muted)}
+pre.mermaid svg{display:block;margin:0 auto;max-width:100%;height:auto}
+.scroll{overflow-x:auto;margin-bottom:16px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{text-align:left;font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;
+text-transform:uppercase;color:var(--faint);font-weight:500;padding:8px 10px 8px 0;
+border-bottom:1px solid var(--rule)}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--muted)}
+td:first-child{color:var(--ink)}
+td em{font-family:var(--mono);font-style:normal;font-size:11px;color:var(--flag)}
+hr{border:none;border-top:1px solid var(--rule);margin:24px 0 14px}
+.view hr ~ p{font-size:12.5px;color:var(--faint)}
+.index-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.index-list a{display:block;padding:16px 0;border-bottom:1px solid var(--rule);
+text-decoration:none;color:inherit}
+.index-list a:hover .t{color:var(--accent)}
+.index-list .t{font-family:var(--serif);font-size:19px;font-weight:600}
+.index-list .s{font-family:var(--mono);font-size:11.5px;color:var(--faint);margin-top:3px}
+.warn{background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:3px;
+padding:13px 15px;font-size:13.5px;color:var(--muted);margin-bottom:26px}
+@media (max-width:480px){.view,.tabs{padding-inline:18px}}
+</style></head><body><div class="wrap">
+<p class="eyebrow"><a href="../index.html">← All sessions</a></p>
+<h1>Marketing Management, Sem 3 — Segmentation, Targeting and Positioning</h1>
+<p class="meta">2026-09-11 · Prof. Kulkarni · 72 min · v1</p>
+<div class="warn"><strong>Sample content.</strong> This is not a real lecture. The layout and both views come from the actual renderers; the course, the instructor and everything said in class are invented to show the format.</div>
+<div class="card"><div class="tabs" role="tablist">
+<button class="tab" role="tab" aria-selected="true">Skim · ~5 min</button>
+<button class="tab" role="tab" aria-selected="false">Full notes</button>
+</div>
+<div class="view" role="tabpanel"><blockquote>Segmentation, targeting and positioning are one sequence, not three topics — each step only makes sense because of the one before it.</blockquote>
+<h2>The shape of it</h2>
+<pre class="mermaid">flowchart TD
+    n1["Heterogeneous market"] --&gt; n2["Segment on 4 bases"]
+    n2 --&gt; n3["Evaluate segment attractiveness"]
+    n3 --&gt; n4["Choose targeting strategy"]
+    n4 --&gt; n5["Undifferentiated"]
+    n4 --&gt; n6["Differentiated"]
+    n4 --&gt; n7["Concentrated"]
+    n5 --&gt; n8["Position in the buyers mind"]
+    n6 --&gt; n8
+    n7 --&gt; n8
+    n8 --&gt; n9["Positioning statement"]</pre>
+<h2>The short version</h2>
+<p><strong>Why segment at all</strong> <em>(slides 2–3 · 00:04:10-00:14:35)</em></p>
+<ul><li>A market is heterogeneous by default — customers differ in what they want, what they can pay, and how they buy. Treating them as one group means the product fits nobody particularly well.</li><li>Sir used the Nykaa vs local kirana example: same shampoo, completely different buyer, so completely different channel and price point.</li><li>⭐ Repeated twice: segmentation is a means, not an end. If two segments respond identically to your marketing mix, they are one segment.</li></ul>
+<p><strong>The four bases of segmentation</strong> <em>(slides 4–6 · 00:14:35-00:33:20)</em></p>
+<ul><li>Geographic — region, city tier, climate. Cheapest to act on, weakest predictor of behaviour on its own.</li><li>Demographic — age, income, gender, occupation, family stage. Easy to measure, which is why it is overused.</li><li>⭐ Behavioural segmentation is the one to reach for first. Demographics are a proxy for behaviour, and a bad one.</li></ul>
+<p><strong>Targeting strategies</strong> <em>(slides 7–8 · 00:33:20-00:49:05)</em></p>
+<ul><li>Undifferentiated — one offer for the whole market. Works only where the product is a commodity and scale is the advantage.</li><li>Differentiated — separate offers per segment. Higher reach, materially higher cost, and the cost is usually underestimated.</li><li>⭐ For a startup the answer is almost always concentrated. You cannot out-spend an incumbent on differentiated marketing.</li></ul>
+<p><strong>Positioning and perceptual mapping</strong> <em>(slides 9–11 · 00:49:05-01:08:40)</em></p>
+<ul><li>Positioning is the place your brand occupies in the customer's mind relative to competitors — not what you say about yourself, but what they believe.</li><li>A perceptual map plots competitors on two attributes that matter to the buyer. Gaps on the map are candidate positions, but an empty space may be empty because nobody wants it.</li><li>⭐ Flagged directly as an exam question: be able to write a positioning statement for a given brand in the prescribed format.</li></ul>
+<p><strong>Price elasticity (rushed at the end)</strong> <em>(slides 12–13 · 01:08:40-01:12:15)</em></p>
+<ul><li>Elastic demand — quantity responds sharply to price. Inelastic — it does not.</li><li>Cross-price elasticity was mentioned but not explained; he said it would be picked up next session.</li></ul>
+<h2>Terms</h2>
+<ul><li><strong>Market Segmentation</strong> — Dividing a heterogeneous market into groups that respond differently to the marketing mix.</li><li><strong>Psychographic Segmentation</strong> — Segmenting on lifestyle, values and personality rather than observable demographics.</li><li><strong>VALS Framework</strong> — A psychographic model classifying consumers by primary motivation and resources.</li><li><strong>Behavioural Segmentation</strong> — Segmenting on what customers actually do — usage rate, loyalty, benefits sought, occasion.</li><li><strong>Concentrated Marketing</strong> — Serving one segment properly rather than several partially. The usual choice for a new entrant.</li><li><strong>Perceptual Mapping</strong> — Plotting competing brands against two buyer-relevant attributes to find candidate positions.</li><li><strong>Points of Parity</strong> — Attributes you must have to be considered in a category at all.</li><li><strong>Points of Difference</strong> — Attributes that make a buyer choose you over the alternative.</li><li><em>…and 3 more in the full notes.</em></li></ul>
+<h2>If you got lost</h2>
+<p><strong>Price Elasticity</strong> — The lecturer moved past this quickly.</p>
+<ul><li><a href="https://www.youtube.com/results?search_query=khan+academy+price+elasticity" target="_blank" rel="noopener">Price Elasticity of Demand</a> — Khan Academy</li></ul>
+<p><strong>Cross Price Elasticity</strong> — Named in class but not explained — deferred to next session.</p>
+<ul><li><a href="https://www.youtube.com/results?search_query=cross+price+elasticity+explained" target="_blank" rel="noopener">Search YouTube for this</a></li></ul>
+<hr>
+<p><em>Generated from the master artifact. <strong>Do not edit this file</strong> — edits are lost on the next regeneration. Spotted an error? Report it, and the fix reaches everyone's copy.</em></p>
+<p><em>v1 · 2026-09-11T11:42:08+00:00 · anthropic/claude-opus-5</em></p></div>
+<div class="view" role="tabpanel" hidden><blockquote>Segmentation, targeting and positioning are one sequence, not three topics — each step only makes sense because of the one before it.</blockquote>
+<h2>The shape of it</h2>
+<pre class="mermaid">flowchart TD
+    n1["Heterogeneous market"] --&gt; n2["Segment on 4 bases"]
+    n2 --&gt; n3["Evaluate segment attractiveness"]
+    n3 --&gt; n4["Choose targeting strategy"]
+    n4 --&gt; n5["Undifferentiated"]
+    n4 --&gt; n6["Differentiated"]
+    n4 --&gt; n7["Concentrated"]
+    n5 --&gt; n8["Position in the buyers mind"]
+    n6 --&gt; n8
+    n7 --&gt; n8
+    n8 --&gt; n9["Positioning statement"]</pre>
+<h2>Notes</h2>
+<h3>Why segment at all <em>(slides 2–3 · 00:04:10-00:14:35)</em></h3>
+<ul><li>A market is heterogeneous by default — customers differ in what they want, what they can pay, and how they buy. Treating them as one group means the product fits nobody particularly well.</li><li>Sir used the Nykaa vs local kirana example: same shampoo, completely different buyer, so completely different channel and price point.</li><li>Segmentation is only worth doing if the segments are measurable, substantial, accessible and actionable. He spent a while on 'substantial' — a segment you can describe but can't profitably serve is not a segment.</li></ul>
+<p><strong>Stressed:</strong> Repeated twice: segmentation is a means, not an end. If two segments respond identically to your marketing mix, they are one segment.</p>
+<p><strong>Said in class, not on the deck:</strong> Told the story of a startup that segmented by age and found 18-24 and 25-30 behaved identically — wasted six months building two campaigns.</p>
+<h3>The four bases of segmentation <em>(slides 4–6 · 00:14:35-00:33:20)</em></h3>
+<ul><li>Geographic — region, city tier, climate. Cheapest to act on, weakest predictor of behaviour on its own.</li><li>Demographic — age, income, gender, occupation, family stage. Easy to measure, which is why it is overused.</li><li>Psychographic — lifestyle, values, personality. The VALS framework was covered here. Much harder to measure but explains behaviour the demographic data cannot.</li><li>Behavioural — usage rate, loyalty status, benefits sought, occasion. Sir called this the most useful one in practice because it segments on what people actually do rather than who they are.</li></ul>
+<p><strong>Stressed:</strong> Behavioural segmentation is the one to reach for first. Demographics are a proxy for behaviour, and a bad one.</p>
+<p><strong>Said in class, not on the deck:</strong> Aside on why Indian FMCG still leans heavily on geographic and demographic bases — distribution data is available, psychographic data is not.</p>
+<h3>Targeting strategies <em>(slides 7–8 · 00:33:20-00:49:05)</em></h3>
+<ul><li>Undifferentiated — one offer for the whole market. Works only where the product is a commodity and scale is the advantage.</li><li>Differentiated — separate offers per segment. Higher reach, materially higher cost, and the cost is usually underestimated.</li><li>Concentrated — one segment, served properly. The default sensible choice for a new entrant with limited capital.</li><li>Choice depends on company resources, product variability, stage in the product life cycle, and what competitors are already doing.</li></ul>
+<p><strong>Stressed:</strong> For a startup the answer is almost always concentrated. You cannot out-spend an incumbent on differentiated marketing.</p>
+<h3>Positioning and perceptual mapping <em>(slides 9–11 · 00:49:05-01:08:40)</em></h3>
+<ul><li>Positioning is the place your brand occupies in the customer's mind relative to competitors — not what you say about yourself, but what they believe.</li><li>A perceptual map plots competitors on two attributes that matter to the buyer. Gaps on the map are candidate positions, but an empty space may be empty because nobody wants it.</li><li>Points of parity are what you must have to be considered at all. Points of difference are why you get chosen over the alternative.</li><li>The positioning statement format he gave: for [target segment] who [need], our [brand] is the [category] that [key benefit], unlike [main competitor].</li></ul>
+<p><strong>Stressed:</strong> Flagged directly as an exam question: be able to write a positioning statement for a given brand in the prescribed format.</p>
+<p><strong>Said in class, not on the deck:</strong> Worked through a positioning statement for Boat headphones on the board — this was not on the slides.</p>
+<h3>Price elasticity (rushed at the end) <em>(slides 12–13 · 01:08:40-01:12:15)</em></h3>
+<ul><li>Elastic demand — quantity responds sharply to price. Inelastic — it does not.</li><li>Cross-price elasticity was mentioned but not explained; he said it would be picked up next session.</li></ul>
+<p><strong>Said in class, not on the deck:</strong> Ran out of time — covered two slides in under four minutes and said 'ye next class mein properly karenge'.</p>
+<h2>Key terms</h2>
+<div class="scroll"><table><thead><tr><th>Term</th><th>Meaning</th><th>Slide</th></tr></thead><tbody><tr><td><strong>Market Segmentation</strong></td><td>Dividing a heterogeneous market into groups that respond differently to the marketing mix. <br><em>heard as "market segment nation"</em></td><td>2</td></tr><tr><td><strong>Psychographic Segmentation</strong></td><td>Segmenting on lifestyle, values and personality rather than observable demographics. <br><em>heard as "psycho graphic segmentation"</em></td><td>6</td></tr><tr><td><strong>VALS Framework</strong></td><td>A psychographic model classifying consumers by primary motivation and resources. <br><em>heard as "the wells framework"</em></td><td>6</td></tr><tr><td><strong>Behavioural Segmentation</strong></td><td>Segmenting on what customers actually do — usage rate, loyalty, benefits sought, occasion.</td><td>6</td></tr><tr><td><strong>Concentrated Marketing</strong></td><td>Serving one segment properly rather than several partially. The usual choice for a new entrant. <br><em>heard as "concentrated marketing strategy"</em></td><td>8</td></tr><tr><td><strong>Perceptual Mapping</strong></td><td>Plotting competing brands against two buyer-relevant attributes to find candidate positions. <br><em>heard as "perceptual napping"</em></td><td>10</td></tr><tr><td><strong>Points of Parity</strong></td><td>Attributes you must have to be considered in a category at all.</td><td>11</td></tr><tr><td><strong>Points of Difference</strong></td><td>Attributes that make a buyer choose you over the alternative.</td><td>11</td></tr><tr><td><strong>Positioning Statement</strong></td><td>A fixed-format sentence naming target, need, category, key benefit and main competitor.</td><td>11</td></tr><tr><td><strong>Price Elasticity</strong></td><td>How sharply quantity demanded responds to a change in price. <br><em>heard as "price elasticity of demand"</em></td><td>12</td></tr><tr><td><strong>Cross Price Elasticity</strong></td><td>How demand for one product responds to a price change in another. <br><em>heard as "cross elasticity"</em></td><td>13</td></tr></tbody></table></div>
+<h2>Where the class moved fast</h2>
+<p><strong>Price Elasticity</strong> — The lecturer moved past this quickly.</p>
+<ul><li><a href="https://www.youtube.com/results?search_query=khan+academy+price+elasticity" target="_blank" rel="noopener">Price Elasticity of Demand</a> — Khan Academy</li></ul>
+<p><strong>Cross Price Elasticity</strong> — Named in class but not explained — deferred to next session.</p>
+<ul><li><a href="https://www.youtube.com/results?search_query=cross+price+elasticity+explained" target="_blank" rel="noopener">Search YouTube for this</a></li></ul>
+<h2>For revision</h2>
+<p><strong>Flagged as important</strong></p>
+<ul><li>Write a positioning statement for a given brand in the prescribed format — flagged directly as an exam question.</li><li>Segmentation is a means, not an end. If two segments respond identically, they are one segment.</li><li>Know the four bases and be able to argue which is most appropriate for a given product.</li></ul>
+<p><strong>Questions this lecture supports</strong></p>
+<ul><li>Define market segmentation and explain the four bases with an Indian example for each.</li><li>Compare undifferentiated, differentiated and concentrated targeting. Which suits a new entrant, and why?</li><li>Draw a perceptual map for a category of your choice and identify a viable gap.</li><li>Write a positioning statement for Boat headphones using the format given in class.</li></ul>
+<h2>Left open</h2>
+<ul><li>A student asked whether behavioural segmentation is practical without purchase data. Sir said 'we'll come to that' and moved on — unanswered.</li><li>Cross-price elasticity was named but not explained; deferred to next session.</li></ul>
+<hr>
+<p><em>Generated from the master artifact. <strong>Do not edit this file</strong> — edits are lost on the next regeneration. Spotted an error? Report it, and the fix reaches everyone's copy.</em></p>
+<p><em>v1 · 2026-09-11T11:42:08+00:00 · anthropic/claude-opus-5</em></p></div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js"></script>
+<script>
+(function(){
+  var dark = matchMedia('(prefers-color-scheme: dark)').matches;
+  if (window.mermaid) mermaid.initialize({startOnLoad:true, theme: dark ? 'dark' : 'neutral'});
+  var tabs = [].slice.call(document.querySelectorAll('.tab'));
+  var views = [].slice.call(document.querySelectorAll('.view'));
+  tabs.forEach(function(tab, i){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t, j){ t.setAttribute('aria-selected', i===j ? 'true':'false'); });
+      views.forEach(function(v, j){ v.hidden = i!==j; });
+    });
+  });
+})();
+</script>
+</body></html>
