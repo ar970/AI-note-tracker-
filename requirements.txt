@@ -2,6 +2,8 @@
 requests>=2.31
 python-dotenv>=1.0
 pypdf>=4.0          # PDF decks
+cryptography>=3.1   # pypdf needs this for AES-encrypted PDFs — common for
+                    # "protected" decks exported with copy/print restrictions
 python-pptx>=0.6.23 # PPTX decks
 
 # LLM backends — install only the one you use.

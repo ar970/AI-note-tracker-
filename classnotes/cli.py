@@ -80,6 +80,14 @@ def cmd_run(args: argparse.Namespace) -> int:
     if args.deck:
         parsed_deck = deck_step.load(Path(args.deck))
         _say("2/6", f"deck: {len(parsed_deck.slides)} slides from {parsed_deck.source}")
+        if parsed_deck.looks_scanned:
+            _say(
+                "2/6",
+                f"WARNING: only {parsed_deck.text_characters} characters of text across "
+                f"{len(parsed_deck.slides)} slides — this deck looks scanned or "
+                "image-only. Terminology correction and slide anchoring will barely "
+                "work. Get a text-based PDF or the original .pptx if you can.",
+            )
         (session_dir / "deck.md").write_text(parsed_deck.as_markdown(), encoding="utf-8")
     else:
         _say("2/6", "no deck supplied — alignment will be much weaker (see README)")

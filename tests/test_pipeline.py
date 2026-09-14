@@ -225,6 +225,76 @@ class TestViews(unittest.TestCase):
             self.assertTrue(renderer(bare).strip())
 
 
+class TestRealWorldDecks(unittest.TestCase):
+    """Regressions found by running deck parsing over 70 real-world PDFs.
+
+    Everything here failed on an actual file before it was a test.
+    """
+
+    def test_all_caps_headings_do_not_flood_the_vocabulary(self):
+        """ALL-CAPS slide titles are the norm in plenty of university decks.
+        Matching every 2-6 letter caps run put THE/OF/AND in the ASR prompt at
+        the acronym weight bonus, outranking the real jargon."""
+        deck = Deck(
+            source="t",
+            slides=[Slide(1, "THE BASICS OF MARKET SEGMENTATION AND TARGETING", ["Body"])],
+        )
+        terms = deck.terms()
+        for noise in ("THE", "OF", "AND"):
+            self.assertNotIn(noise, terms)
+
+    def test_real_acronyms_survive_the_filter(self):
+        deck = Deck(source="t", slides=[Slide(1, "The VALS and SWOT Frameworks", [])])
+        terms = deck.terms()
+        self.assertIn("VALS", terms)
+        self.assertIn("SWOT", terms)
+
+    def test_image_only_deck_is_flagged_not_silently_accepted(self):
+        deck = Deck(source="t", slides=[Slide(i, "", []) for i in range(1, 21)])
+        self.assertTrue(deck.looks_scanned)
+
+    def test_deck_with_real_text_is_not_flagged(self):
+        self.assertFalse(sample_deck().looks_scanned)
+
+    def test_empty_deck_is_flagged(self):
+        self.assertTrue(Deck(source="t", slides=[]).looks_scanned)
+
+    def _write_pdf(self, path, user_password):
+        from pypdf import PdfWriter
+
+        writer = PdfWriter()
+        writer.add_blank_page(width=612, height=792)
+        writer.encrypt(user_password=user_password, owner_password="ownerpass")
+        with path.open("wb") as handle:
+            writer.write(handle)
+
+    def test_permission_restricted_pdf_opens(self):
+        """Faculty 'protected' exports are encrypted with an empty user
+        password. These used to crash with FileNotDecryptedError."""
+        import tempfile
+        from pathlib import Path
+
+        from classnotes.deck import load
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "protected.pdf"
+            self._write_pdf(path, user_password="")
+            load(path)  # must not raise
+
+    def test_password_locked_pdf_gives_an_actionable_error(self):
+        import tempfile
+        from pathlib import Path
+
+        from classnotes.deck import load
+
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "locked.pdf"
+            self._write_pdf(path, user_password="secret123")
+            with self.assertRaises(ValueError) as caught:
+                load(path)
+            self.assertIn("password-protected", str(caught.exception))
+
+
 class TestVersioning(unittest.TestCase):
     def test_versions_increment_and_never_overwrite(self):
         import tempfile

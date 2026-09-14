@@ -230,13 +230,34 @@ Not oversights. Say so if asked:
 .venv/bin/python -m unittest discover -s tests -v
 ```
 
-32 tests covering chunk stitching, vocabulary selection, Mermaid escaping, artifact
+39 tests covering chunk stitching, vocabulary selection, Mermaid escaping, artifact
 normalisation and view rendering — the logic that is easy to get quietly wrong.
 
-They cannot tell you whether the notes are any good. **Only a real lecture does that**, and
-that test has not been run: this was built in a sandbox with no API keys and no access to
-open-courseware hosts, so quality on real classroom audio is unverified. Run one real
-90-minute lecture end-to-end before trusting any of it.
+**Step [2] has been tested against real files.** Deck parsing was run over 138 real-world
+documents (70 PDFs and 68 PPTX files from the pypdf, pdfminer and python-pptx test
+corpora — LaTeX output, OCR scans, multilingual documents, encrypted files, forms). That
+found three bugs that a synthetic fixture never would:
+
+- Encrypted PDFs crashed. Most "protected" lecture decks aren't password-locked at all —
+  faculty export with copy/print restrictions, which encrypts the file with an *empty*
+  password. 15 of 70 files crashed; now 0 do.
+- Image-only decks parsed "successfully" with no text and degraded alignment silently.
+  Now warned about loudly.
+- ALL-CAPS slide titles — the norm in a lot of Indian university decks — flooded the ASR
+  vocabulary budget with `THE`, `OF`, `AND` at the acronym weight bonus, crowding out the
+  real jargon.
+
+**Steps [1], [3] and [4] remain unverified.** No API keys existed in the build sandbox, so
+transcription and generation have never run against anything. The tests cannot tell you
+whether the notes are any *good* — only a real lecture does that. Run one real 90-minute
+lecture end-to-end before trusting any of it.
+
+### If a deck won't load
+
+- *"is password-protected"* — genuinely locked. Ask for an unlocked copy.
+- *"looks scanned or image-only"* — it's a picture of slides. Alignment will be weak;
+  get a text PDF or the original `.pptx` if you can.
+- *"Legacy .ppt is not supported"* — open and re-save as `.pptx`.
 
 ---
 

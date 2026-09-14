@@ -29,6 +29,24 @@ STOPWORDS = {
     "Note", "Example", "Summary", "Overview", "Today", "Next", "Recap",
 }
 
+# The acronym pattern matches any 2-6 letter all-caps run, which on a deck with
+# ALL-CAPS HEADINGS — the norm in a lot of Indian university decks — means THE,
+# OF and AND get matched *and* given the acronym weight bonus, outranking the
+# real jargon in a budget that only fits about twenty terms. Ordinary words
+# caught this way (MARKET, VALUE) are harmless and often genuinely the deck's
+# vocabulary; pure function words and date fragments are not.
+UPPERCASE_NOISE = {
+    "THE", "AND", "FOR", "WITH", "THAT", "THIS", "FROM", "INTO", "YOUR", "ARE",
+    "WAS", "WERE", "NOT", "BUT", "ITS", "WHAT", "WHEN", "HOW", "WHY", "WHO",
+    "ALL", "ANY", "OUR", "THEN", "THAN", "THEM", "THESE", "THOSE", "BEEN",
+    "ONLY", "OVER", "SUCH", "MORE", "MOST", "ALSO", "SEE", "USE", "NEW", "END",
+    "ONE", "TWO", "OF", "TO", "IN", "ON", "AT", "BY", "OR", "AS", "IS", "IT",
+    "BE", "AN", "IF", "SO", "NO", "DO", "WE", "YOU", "MAY", "CAN", "WILL",
+    "HAS", "HAVE", "UNIT", "PART", "PAGE", "NOTE",
+    "JAN", "FEB", "MAR", "APR", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC",
+    "JUNE", "JULY", "MARCH", "APRIL",
+}
+
 
 @dataclass
 class Slide:
@@ -54,6 +72,25 @@ class Deck:
     def as_markdown(self) -> str:
         return "\n\n".join(slide.as_markdown() for slide in self.slides)
 
+    @property
+    def text_characters(self) -> int:
+        return sum(
+            len(s.title) + sum(len(line) for line in s.body) for s in self.slides
+        )
+
+    @property
+    def looks_scanned(self) -> bool:
+        """True when there is far too little text for the number of slides.
+
+        A deck exported as images — scanned handouts, or a PDF of photographed
+        slides — parses without error and yields almost nothing. Left unsaid,
+        that silently degrades alignment to transcript-only and the notes come
+        out vague for a reason nobody can see.
+        """
+        if not self.slides:
+            return True
+        return self.text_characters / len(self.slides) < 20
+
     def terms(self, limit: int = 60) -> list[str]:
         """Candidate technical vocabulary, ranked by how deck-specific it looks.
 
@@ -71,6 +108,8 @@ class Deck:
 
         def add(text: str, weight: float, allow_single: bool) -> None:
             for match in ACRONYM.findall(text):
+                if match in UPPERCASE_NOISE:
+                    continue
                 scores[match] = scores.get(match, 0.0) + weight * 1.5
             for match in TITLE_PHRASE.findall(text):
                 match = " ".join(match.split())
@@ -103,8 +142,29 @@ def _clean(lines: list[str]) -> list[str]:
 
 def _from_pdf(path: Path) -> Deck:
     from pypdf import PdfReader
+    from pypdf.errors import DependencyError
 
     reader = PdfReader(str(path))
+
+    if reader.is_encrypted:
+        # Most "encrypted" lecture decks are not password-protected at all:
+        # faculty export with copy/print restrictions, which encrypts the file
+        # with an *empty* user password. pypdf still refuses to read it until
+        # you say so. Without this, a student uploads the professor's PDF and
+        # the pilot dies on a FileNotDecryptedError nobody can interpret.
+        try:
+            unlocked = reader.decrypt("")
+        except DependencyError as exc:
+            raise ValueError(
+                f"{path.name} uses AES encryption and the 'cryptography' package "
+                f"is missing. Run: pip install -r requirements.txt ({exc})"
+            ) from exc
+        if not unlocked:
+            raise ValueError(
+                f"{path.name} is password-protected. Ask whoever shared it for an "
+                "unlocked copy, or export the slides to PDF again without a password."
+            )
+
     slides: list[Slide] = []
     for index, page in enumerate(reader.pages, start=1):
         lines = _clean((page.extract_text() or "").splitlines())
