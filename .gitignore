@@ -1,0 +1,22 @@
+# Secrets
+.env
+
+# Session data: recordings, transcripts and generated notes.
+# Recordings of a real classroom do not belong in a public repo — you took
+# consent to make notes for the class, not to publish the audio.
+data/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Scratch
+*.mp3
+*.m4a
+*.wav
+*.mp4
+.DS_Store

@@ -1,0 +1,12 @@
+# Core pipeline
+requests>=2.31
+python-dotenv>=1.0
+pypdf>=4.0          # PDF decks
+python-pptx>=0.6.23 # PPTX decks
+
+# LLM backends — install only the one you use.
+# OpenAI and Gemini are called over plain REST and need nothing extra.
+anthropic>=1.0      # only if LLM_PROVIDER=anthropic
+
+# System dependency, not pip-installable:
+#   ffmpeg + ffprobe   (apt install ffmpeg / brew install ffmpeg)
